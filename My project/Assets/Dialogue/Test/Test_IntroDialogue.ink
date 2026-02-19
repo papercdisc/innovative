@@ -5,7 +5,7 @@ INCLUDE globals.ink
 "Hi there! Let's get to know you a bit."
 -> q1
 
-= q1
+=== q1 ===
 "What best describes you?"
 
 * I'm a night owl.
@@ -21,7 +21,7 @@ INCLUDE globals.ink
     "Well, that's quite a dull answer, isn't it?"
    -> q2
    
-= q2
+=== q2 ===
 "What kind of food do you like to eat?"
 
 * I'm a vegetarian.
@@ -37,7 +37,7 @@ INCLUDE globals.ink
     "I can't really fault you for that mindset."
     -> q3 
  
- = q3
+ === q3 ===
  "One last question: Why do you seek the Grail?"
  
  * I want to help others.

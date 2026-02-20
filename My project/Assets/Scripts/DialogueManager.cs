@@ -161,7 +161,7 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
-    private void HandleVariableChanges()
+    private void HandleVariableChanges() // just figure out a way to grab the recently changed variables (put them in a list) and display in the UI
     {
 
     }

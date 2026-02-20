@@ -9,7 +9,7 @@ using System.IO;
 /// </summary>
 public class DialogueVariableObserver 
 {
-    private Dictionary<string, Ink.Runtime.Object> variables;
+    public Dictionary<string, Ink.Runtime.Object> variables { get; private set; }
     public DialogueVariableObserver(string globalIsFilePath)
     {
         // compile into story 
@@ -40,6 +40,7 @@ public class DialogueVariableObserver
     private void VariableChanged(string name, Ink.Runtime.Object value)
     {
         Debug.Log("Variable changed: " + name + " = " +  value);
+
 
         // only maintains variables stored in the global ink file
         if (variables.ContainsKey(name))

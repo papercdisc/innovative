@@ -553,12 +553,12 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1655562257}
-  m_Father: {fileID: 772971789}
+  m_Father: {fileID: 807427804}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -144.635, y: 119}
-  m_SizeDelta: {x: -309.27, y: 40}
+  m_AnchoredPosition: {x: 0, y: 19.999992}
+  m_SizeDelta: {x: 0, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &218319794
 MonoBehaviour:
@@ -1305,8 +1305,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 590500891}
-  - {fileID: 218319793}
-  - {fileID: 924930715}
+  - {fileID: 807427804}
   - {fileID: 1973644679}
   m_Father: {fileID: 1458088009}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1338,6 +1337,43 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 772971788}
   m_CullTransparentMesh: 1
+--- !u!1 &807427803
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 807427804}
+  m_Layer: 5
+  m_Name: Speaker
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &807427804
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 807427803}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 218319793}
+  - {fileID: 924930715}
+  m_Father: {fileID: 772971789}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: -153, y: 118.999985}
+  m_SizeDelta: {x: -326, y: 40}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -1540,7 +1576,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &924930715
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1553,11 +1589,11 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 772971789}
+  m_Father: {fileID: 807427804}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 112, y: 0}
+  m_AnchoredPosition: {x: -297.99997, y: -98.999985}
   m_SizeDelta: {x: 205, y: 190}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &924930716
@@ -1721,8 +1757,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38e201aef7e0eb44da37089da934d055, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DialogueManager
+  OnExitDialogue:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1935891824}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: StartNextStory
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  _globalsInkFile:
+    inkAsset: {fileID: 102900000, guid: 25e3d1aa291dd754d96a5a8100a5d315, type: 3}
+    jsonAssetDirectory: {fileID: 0}
+    jsonAsset: {fileID: 0}
+    unhandledCompileErrors: []
+    recursiveIncludeErrorPaths: []
+    errors: []
+    warnings: []
+    todos: []
+    masterInkAssets: []
+    localIncludePaths: []
+    includes: []
   _dialoguePanel: {fileID: 772971788}
   _dialogueText: {fileID: 515530967}
+  _speakerPanel: {fileID: 807427803}
+  _speakerNameText: {fileID: 1655562258}
   choices:
   - {fileID: 2094735507}
   - {fileID: 19681252}
@@ -1943,8 +2008,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 343.865, y: -20}
-  m_SizeDelta: {x: 257.73, y: 38}
+  m_AnchoredPosition: {x: 335.5, y: -20}
+  m_SizeDelta: {x: 241, y: 38}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1655562258
 MonoBehaviour:
@@ -2396,6 +2461,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   inkJSON: {fileID: 4900000, guid: b7f73bf89c2fde947b1c6097e19b3433, type: 3}
+  inkJSON_2: {fileID: 4900000, guid: 404f16cc27a317040ab00ccb96e002a4, type: 3}
 --- !u!1 &1973644678
 GameObject:
   m_ObjectHideFlags: 0

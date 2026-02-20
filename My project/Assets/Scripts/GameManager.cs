@@ -27,9 +27,14 @@ public class GameManager : MonoBehaviour
     // ------------------------------------------
 
     [SerializeField] private TextAsset inkJSON; 
+    [SerializeField] private TextAsset inkJSON_2; // placeholder
 
     public void StartStory() // this is not final---just for testing purposes
     {
         DialogueManager.GetInstance().EnterDialogueMode(inkJSON);
+    }
+    public void StartNextStory() // placeholder (its garbage lmao dont keep this)
+    {
+        DialogueManager.GetInstance().EnterDialogueMode(inkJSON_2);
     }
 }

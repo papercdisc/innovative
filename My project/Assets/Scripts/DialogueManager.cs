@@ -5,6 +5,8 @@ using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
 using System.Collections;
+using Ink.UnityIntegration;
+using UnityEngine.Events;
 
 /// <summary>
 /// resources: https://www.youtube.com/watch?v=vY0Sk93YUhA&list=PL3viUl9h9k78KsDxXoAzgQ1yRjhm7p8kl&index=3
@@ -12,9 +14,16 @@ using System.Collections;
 
 public class DialogueManager : MonoBehaviour
 {
+    public UnityEvent<Story> OnExitDialogue;
+
+    [Header("Globals Ink File")]
+    [SerializeField] [Tooltip("Reference to the Ink file containing global variables")] private InkFile _globalsInkFile;
+
     [Header("Dialogue UI")]
     [SerializeField] private GameObject _dialoguePanel;
     [SerializeField] private TMP_Text _dialogueText;
+    [SerializeField] private GameObject _speakerPanel;
+    [SerializeField] private TMP_Text _speakerNameText;
 
     [Header("Choices UI")]
     [SerializeField] private GameObject[] choices;
@@ -23,6 +32,12 @@ public class DialogueManager : MonoBehaviour
     private Story _currentStory;
     public bool _dialogueIsPlaying { get; private set; }
     bool _canContinueToNextLine = true;
+
+    private DialogueVariableObserver _dialogueVariables;
+
+    // Tags -------------------------------------
+    private const string SPEAKER_TAG = "characterName";
+    // ------------------------------------------
 
     // Declaring Singleton ----------------------
     private static DialogueManager instance;
@@ -36,6 +51,8 @@ public class DialogueManager : MonoBehaviour
         {
             instance = this;
         }
+
+        _dialogueVariables = new DialogueVariableObserver(_globalsInkFile.filePath);
     }
     public static DialogueManager GetInstance()
     {
@@ -78,14 +95,23 @@ public class DialogueManager : MonoBehaviour
         _dialogueIsPlaying = true;
         _dialoguePanel.SetActive(true);
 
+        _dialogueVariables.StartListening(_currentStory);
+
+        _speakerNameText.text = "???";
+        _speakerPanel.SetActive(false);
+
         ContinueStory();
     }
 
     private void ExitDialogueMode()
     {
+        _dialogueVariables.StopListening(_currentStory);
+
         _dialogueIsPlaying = false;
         _dialoguePanel.SetActive(false);
         _dialogueText.text = "";
+
+        OnExitDialogue?.Invoke(_currentStory);
     }
 
     private void ContinueStory()
@@ -94,11 +120,50 @@ public class DialogueManager : MonoBehaviour
         {
             _dialogueText.text = _currentStory.Continue();
             DisplayChoices();
+            HandleTags(_currentStory.currentTags);
         }
         else
         {
             ExitDialogueMode();
         }
+    }
+    private void HandleTags(List<string> currentTags)
+    {
+        foreach (string tag in currentTags)
+        {
+            string[] splitTag = tag.Split(':');
+            if (splitTag.Length != 2)
+            {
+                Debug.LogWarning("Tag could not be parsed: " + tag);
+                continue;
+            }
+            string tagKey = splitTag[0].Trim();
+            string tagValue = splitTag[1].Trim();
+            switch (tagKey)
+            {
+                case SPEAKER_TAG:
+                    // handle speaker name change (e.g. update name text above dialogue panel)
+                    Debug.Log("Speaker tag found with value: " + tagValue);
+                    
+                    if (tagValue.ToLower() == "narrator")
+                    {
+                        _speakerPanel.SetActive(false);
+                        break;
+                    }
+
+                    _speakerPanel.SetActive(true);
+                    _speakerNameText.text = tagValue;
+                    break;
+                default:
+                    Debug.LogWarning("Tag key not recognized: " + tagKey);
+                    break;
+            }
+        }
+    }
+
+    private void HandleVariableChanges()
+    {
+
     }
 
     private void DisplayChoices()
@@ -148,5 +213,16 @@ public class DialogueManager : MonoBehaviour
     {
         _currentStory.ChooseChoiceIndex(choiceIndex);
         ContinueStory();
+    }
+
+    public Ink.Runtime.Object GetVariableState(string variableName)
+    {
+        Ink.Runtime.Object variableValue = null;
+        _dialogueVariables.variables.TryGetValue(variableName, out variableValue);
+        if (variableValue == null)
+        {
+            Debug.LogWarning("Variable was not found: " + variableName);
+        }
+        return variableValue;
     }
 }

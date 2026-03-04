@@ -1,5 +1,5 @@
 INCLUDE globals.ink
-//INCLUDE Test_CampfireDialogue.ink
+
 -> INTRO
 
 === INTRO ===

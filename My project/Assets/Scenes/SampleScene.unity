@@ -2246,18 +2246,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  _globalsInkFile:
-    inkAsset: {fileID: 102900000, guid: 25e3d1aa291dd754d96a5a8100a5d315, type: 3}
-    jsonAssetDirectory: {fileID: 0}
-    jsonAsset: {fileID: 0}
-    unhandledCompileErrors: []
-    recursiveIncludeErrorPaths: []
-    errors: []
-    warnings: []
-    todos: []
-    masterInkAssets: []
-    localIncludePaths: []
-    includes: []
+  _loadGlobalsJSON: {fileID: 4900000, guid: 22404aeff82fcea498959d1af65c83eb, type: 3}
   _dialoguePanel: {fileID: 772971788}
   _dialogueText: {fileID: 515530967}
   _speakerPanel: {fileID: 807427803}

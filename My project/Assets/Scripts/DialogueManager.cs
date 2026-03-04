@@ -5,7 +5,6 @@ using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
 using System.Collections;
-using Ink.UnityIntegration;
 using UnityEngine.Events;
 
 /// <summary>
@@ -16,8 +15,9 @@ public class DialogueManager : MonoBehaviour
 {
     public UnityEvent<Story> OnExitDialogue;
 
-    [Header("Globals Ink File")]
-    [SerializeField] [Tooltip("Reference to the Ink file containing global variables")] private InkFile _globalsInkFile;
+    // variable for the load_globals.ink JSON
+    [Header("Load Globals JSON")]
+    [SerializeField] private TextAsset _loadGlobalsJSON;
 
     [Header("Dialogue UI")]
     [SerializeField] private GameObject _dialoguePanel;
@@ -52,7 +52,7 @@ public class DialogueManager : MonoBehaviour
             instance = this;
         }
 
-        _dialogueVariables = new DialogueVariableObserver(_globalsInkFile.filePath);
+        _dialogueVariables = new DialogueVariableObserver(_loadGlobalsJSON);
     }
     public static DialogueManager GetInstance()
     {

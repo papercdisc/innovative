@@ -10,16 +10,14 @@ using System.IO;
 public class DialogueVariableObserver 
 {
     public Dictionary<string, Ink.Runtime.Object> variables { get; private set; }
-    public DialogueVariableObserver(string globalIsFilePath)
+    public DialogueVariableObserver(TextAsset loadGlobalsJSON)
     {
-        // compile into story 
-        string inkFileContents = File.ReadAllText(globalIsFilePath);
-        Ink.Compiler compiler = new Ink.Compiler(inkFileContents);
-        Story globalVariablesStory = compiler.Compile();
+        // create the story
+        Story globalVariablesStory = new Story(loadGlobalsJSON.text);
 
-        // initialize dictionary
+        // initialize the dictionary
         variables = new Dictionary<string, Ink.Runtime.Object>();
-        foreach (string name in globalVariablesStory.variablesState) // populate dictionary with the variables stored in the ink story we just created
+        foreach (string name in globalVariablesStory.variablesState)
         {
             Ink.Runtime.Object value = globalVariablesStory.variablesState.GetVariableWithName(name);
             variables.Add(name, value);

@@ -24,6 +24,7 @@ public class PlayerHealth : Health
     [HideInInspector] public UnityEvent<float> OnOverhealthChanged;
 
     public UnityEvent OnDamageTaken;
+    public UnityEvent OnDeath;
 
     [Header("Health Stats")]
     [field: SerializeField] public float maxHealth { get; private set; } = 100f;
@@ -148,6 +149,8 @@ public class PlayerHealth : Health
     {
         // Implement death logic here
         Debug.Log("Player has died.");
+        OnDeath?.Invoke();
+        Time.timeScale = 0f;
     }
 
 

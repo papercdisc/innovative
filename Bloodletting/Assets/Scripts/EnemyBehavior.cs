@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class EnemyBehavior : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class EnemyBehavior : MonoBehaviour
 
     [SerializeField] float moveSpeed;
     [SerializeField] float aggroRadius;
+    [SerializeField] float avoidanceDist = 4;
     [SerializeField] float damageAmount;
 
     GameObject target;
@@ -81,7 +83,7 @@ public class EnemyBehavior : MonoBehaviour
         {
             if(PlayerHealth.Instance != null)
             {
-                if (PlayerHealth.Instance.currentHealth >= PlayerHealth.Instance.maxHealth / 2)
+                if (PlayerHealth.Instance.currentHealth >= PlayerHealth.Instance.maxHealth * 0.8f)
                 {
                     behaviorState = EnemyState.Flee;
                 }
@@ -121,19 +123,24 @@ public class EnemyBehavior : MonoBehaviour
         Vector2 direction = (transform.position - target.transform.position).normalized;
 
         Ray2D ray = new Ray2D(transform.position, direction);
-        if (Physics2D.Raycast(ray.origin, ray.direction, aggroRadius))
+        RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, avoidanceDist);
+        if (hit)
         {
-            // if there's an obstacle in the way, try to move in a different direction
-            Vector2 perpendicularDirection = new Vector2(-direction.y, direction.x);
-            if (!Physics2D.Raycast(transform.position, perpendicularDirection, aggroRadius))
-            {
-                direction = perpendicularDirection;
-            }
-            else if (!Physics2D.Raycast(transform.position, -perpendicularDirection, aggroRadius))
-            {
-                direction = -perpendicularDirection;
-            }
+            Vector2 perpRDir = Vector2.Perpendicular(direction);
+
+            Ray2D perpR = new Ray2D(hit.point, perpRDir);
+            Ray2D perpL = new Ray2D(hit.point, -perpRDir);
+
+            Debug.DrawRay(perpR.origin, perpR.direction, Color.red);
+            Debug.DrawRay(perpL.origin, perpL.direction, Color.green);
+
+            // if ray hits something:
+            //RaycastHit2D hitR = Physics2D.Raycast(perpR.origin, perpR.direction, avoidanceDist);
+            //RaycastHit2D hitL = Physics2D.Raycast(perpL.origin, perpL.direction, avoidanceDist);
+            // draw ray perpendicular to ray at the contact point
+            // the one that extends further (before hitting something) will be the new direction the enemy moves
         }
+        Debug.DrawRay(ray.origin, ray.direction);
 
         rb.linearVelocity = direction * (moveSpeed * 0.75f);
     }

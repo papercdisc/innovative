@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class EnemyHealth : MonoBehaviour
+public class EnemyHealth : Health
 {
     [Header("Health Stats")]
     [field: SerializeField] public float maxHealth { get; private set; } = 100f;
@@ -16,5 +16,17 @@ public class EnemyHealth : MonoBehaviour
     void Update()
     {
 
+    }
+
+    public override void TakeDamage(float dmg)
+    {
+        currentHealth -= dmg;
+        if (currentHealth < 0) {
+            Die();
+        }
+    }
+    public override void Die()
+    {
+        Destroy(gameObject);
     }
 }

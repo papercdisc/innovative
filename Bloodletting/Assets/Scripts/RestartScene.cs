@@ -14,6 +14,8 @@ public class RestartScene : MonoBehaviour
         {
             Instance = this;
         }
+
+        Time.timeScale = 1.0f;
     }
 
     public void RestartCurrentScene()

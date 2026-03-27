@@ -435,7 +435,7 @@ GameObject:
   m_Component:
   - component: {fileID: 212603935}
   - component: {fileID: 212603936}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1002,7 +1002,7 @@ GameObject:
   m_Component:
   - component: {fileID: 613275175}
   - component: {fileID: 613275176}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Triangle (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1318,7 +1318,7 @@ GameObject:
   - component: {fileID: 1016622135}
   - component: {fileID: 1016622134}
   - component: {fileID: 1016622133}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1369,11 +1369,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04ed03a3852e48e419ae86d9aed9ddc8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyBehavior
-  enemyType: 2
+  enemyType: 0
   behaviorState: 0
-  moveSpeed: 3
+  moveSpeed: 4
   aggroRadius: 3
+  avoidanceDist: 4
   damageAmount: 0
+  mask:
+    serializedVersion: 2
+    m_Bits: 55
 --- !u!58 &1016622135
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -1452,7 +1456,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1118491320}
   - component: {fileID: 1118491321}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Triangle
   m_TagString: Untagged
   m_Icon: {fileID: 0}

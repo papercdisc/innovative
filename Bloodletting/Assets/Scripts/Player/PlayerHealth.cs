@@ -148,7 +148,7 @@ public class PlayerHealth : Health
     public override void Die()
     {
         // Implement death logic here
-        Debug.Log("Player has died.");
+        //Debug.Log("Player has died.");
         OnDeath?.Invoke();
         Time.timeScale = 0f;
     }

@@ -57,6 +57,10 @@ public class Explosion : MonoBehaviour
                 //Debug.Log("OnTriggerEnter: Player hit by explosion!");
                 collision.gameObject.GetComponent<PlayerHealth>().TakeDamage(explosionDamage);
             }
+            if (collision.gameObject.GetComponent<EnemyHealth>() != null)
+            {
+                collision.gameObject.GetComponent<EnemyHealth>().TakeDamage(explosionDamage);
+            }
         }
     }
     private void OnTriggerStay2D(Collider2D collision)
@@ -68,6 +72,11 @@ public class Explosion : MonoBehaviour
                 //Debug.Log("OnTriggerStay: Player hit by explosion!");
                 collision.gameObject.GetComponent<PlayerHealth>().TakeDamage(explosionDamage);
 
+                Destroy(bombBehavior.gameObject);
+            }
+            if (collision.gameObject.GetComponent<EnemyHealth>() != null)
+            {
+                collision.gameObject.GetComponent<EnemyHealth>().TakeDamage(explosionDamage);
                 Destroy(bombBehavior.gameObject);
             }
         }

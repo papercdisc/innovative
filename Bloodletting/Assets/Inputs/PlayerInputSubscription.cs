@@ -12,6 +12,8 @@ public class PlayerInputSubscription : MonoBehaviour
             return;
         }
         Instance = this;
+
+        enabled = true;
     }
     public Vector2 MoveInput { get; private set; } = Vector2.zero;
     public Vector2 LookInput { get; private set; } = Vector2.zero;

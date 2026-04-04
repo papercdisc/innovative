@@ -112,7 +112,6 @@ public class EnemyBehavior : MonoBehaviour
         else if (behaviorState == EnemyState.Flee)
         {
             RunFromTarget();
-
         }
 
         //AvoidObstacles();

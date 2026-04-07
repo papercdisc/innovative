@@ -22,7 +22,7 @@ public class PlayerHealth : Health
 
     [HideInInspector] public UnityEvent<float> OnHealthChanged;
     [HideInInspector] public UnityEvent<float> OnOverhealthChanged;
-
+    
     public UnityEvent OnDamageTaken;
     public UnityEvent OnDeath;
 

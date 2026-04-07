@@ -22,6 +22,7 @@ public class AudioManager : MonoBehaviour
         if (playerHealth != null)
         {
             playerHealth.OnHealthChanged.AddListener(UpdateHeartbeatAudio);
+            playerHealth.OnDamageTaken.AddListener(PlayPlayerHitAudio);
         }
     }
 

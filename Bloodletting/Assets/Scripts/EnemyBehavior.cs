@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.UI;
 using UnityEngine.UIElements;
@@ -14,7 +16,10 @@ public class EnemyBehavior : MonoBehaviour
     [SerializeField] float moveSpeed;
     [SerializeField] float aggroRadius;
     [SerializeField] float avoidanceDist = 4;
-    [SerializeField] float damageAmount;
+
+    [SerializeField] float damageAmount = 10f;
+    [SerializeField] float damageInterval = 1f;
+    Coroutine damageOverTimeCoroutine;
 
     [SerializeField] LayerMask mask;
 
@@ -180,5 +185,29 @@ public class EnemyBehavior : MonoBehaviour
         Debug.DrawRay(ray.origin, ray.direction);
 
         rb.linearVelocity = direction * (moveSpeed);
+    }
+
+    IEnumerator DamagePlayerOverTime(Collision2D collision)
+    {
+        while (collision.gameObject.GetComponent<PlayerHealth>() != null)
+        { 
+            collision.gameObject.GetComponent<PlayerHealth>().TakeDamage(damageAmount);
+            yield return new WaitForSeconds(damageInterval); // Adjust the time interval as needed
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.GetComponent<PlayerHealth>() != null)
+        {
+            damageOverTimeCoroutine = StartCoroutine(DamagePlayerOverTime(collision));
+        }
+    }
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.GetComponent<PlayerHealth>() != null)
+        {
+            StopCoroutine(damageOverTimeCoroutine);
+        }
     }
 }

@@ -4,6 +4,7 @@ using UnityEngine.Events;
 public class EnemyHealth : Health
 {
     public UnityEvent OnTakeDamage;
+    public UnityEvent OnDeath;
 
     [Header("Health Stats")]
     [field: SerializeField] public float maxHealth { get; private set; } = 100f;
@@ -32,6 +33,7 @@ public class EnemyHealth : Health
     }
     public override void Die()
     {
+        OnDeath?.Invoke();
         Destroy(gameObject);
     }
 }

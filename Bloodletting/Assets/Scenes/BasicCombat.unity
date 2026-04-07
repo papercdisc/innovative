@@ -1259,17 +1259,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49f41aab30daf554da0334c1555a6685, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInputSubscription
---- !u!114 &1344298684 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2800715081618205209, guid: e3f5eb8ef8167ea42b5946b430d05a15, type: 3}
-  m_PrefabInstance: {fileID: 1344298682}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 98743f164d6b2374984e3fc7c690ab02, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AudioManager
 --- !u!1 &1582753785
 GameObject:
   m_ObjectHideFlags: 0
@@ -1943,45 +1932,9 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 863420123251210755, guid: 429d5b300625c2a4b9f69d74292dcf73, type: 3}
-      propertyPath: OnDeath.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 863420123251210755, guid: 429d5b300625c2a4b9f69d74292dcf73, type: 3}
-      propertyPath: OnDeath.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 863420123251210755, guid: 429d5b300625c2a4b9f69d74292dcf73, type: 3}
       propertyPath: OnDeath.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1340034145281087575}
-    - target: {fileID: 863420123251210755, guid: 429d5b300625c2a4b9f69d74292dcf73, type: 3}
-      propertyPath: OnDeath.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 863420123251210755, guid: 429d5b300625c2a4b9f69d74292dcf73, type: 3}
-      propertyPath: OnDeath.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SetActive
-      objectReference: {fileID: 0}
-    - target: {fileID: 863420123251210755, guid: 429d5b300625c2a4b9f69d74292dcf73, type: 3}
-      propertyPath: OnDamageTaken.m_PersistentCalls.m_Calls.Array.data[1].m_Target
-      value: 
-      objectReference: {fileID: 1344298684}
-    - target: {fileID: 863420123251210755, guid: 429d5b300625c2a4b9f69d74292dcf73, type: 3}
-      propertyPath: OnDamageTaken.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: PlayPlayerHitAudio
-      objectReference: {fileID: 0}
-    - target: {fileID: 863420123251210755, guid: 429d5b300625c2a4b9f69d74292dcf73, type: 3}
-      propertyPath: OnDeath.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: UnityEngine.GameObject, UnityEngine
-      objectReference: {fileID: 0}
-    - target: {fileID: 863420123251210755, guid: 429d5b300625c2a4b9f69d74292dcf73, type: 3}
-      propertyPath: OnDeath.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_BoolArgument
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 863420123251210755, guid: 429d5b300625c2a4b9f69d74292dcf73, type: 3}
-      propertyPath: OnDeath.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
     - target: {fileID: 2107321112249649273, guid: 429d5b300625c2a4b9f69d74292dcf73, type: 3}
       propertyPath: getInput
       value: 

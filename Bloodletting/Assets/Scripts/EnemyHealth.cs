@@ -1,7 +1,10 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class EnemyHealth : Health
 {
+    public UnityEvent OnTakeDamage;
+
     [Header("Health Stats")]
     [field: SerializeField] public float maxHealth { get; private set; } = 100f;
     [field: SerializeField] public float currentHealth { get; private set; }
@@ -21,6 +24,8 @@ public class EnemyHealth : Health
     public override void TakeDamage(float dmg)
     {
         currentHealth -= dmg;
+        OnTakeDamage?.Invoke();
+
         if (currentHealth < 0) {
             Die();
         }

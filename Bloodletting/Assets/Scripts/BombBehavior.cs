@@ -62,7 +62,7 @@ public class BombBehavior : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.GetComponent<EnemyBehavior>()) return;
+        if (collision.gameObject.GetComponent<EnemyBehavior>() != null) return;
 
         if (collision.gameObject != null)
         {

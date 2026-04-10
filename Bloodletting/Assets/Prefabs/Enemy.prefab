@@ -388,7 +388,7 @@ MonoBehaviour:
   enemyType: 0
   behaviorState: 0
   moveSpeed: 4
-  aggroRadius: 3
+  aggroRadius: 4.5
   avoidanceDist: 4
   damageAmount: 15
   damageInterval: 1

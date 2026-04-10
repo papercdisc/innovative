@@ -14,6 +14,8 @@ public class EnvHazard : MonoBehaviour
 
     public float damageInterval = 1f;
     Coroutine damageOverTimeCoroutine;
+    List<Coroutine> enemyDOTCoroutines = new List<Coroutine>();
+    List<EnemyHealth> affectedEnemies = new List<EnemyHealth>();
 
     [Header("Movement Settings")]
     public bool isMoveable = false;
@@ -47,6 +49,13 @@ public class EnvHazard : MonoBehaviour
             collision.GetComponent<PlayerHealth>().TakeDamage(damageAmount);
             yield return new WaitForSeconds(damageInterval); // Adjust the time interval as needed
         }
+        while (collision.GetComponent<EnemyHealth>() != null)
+        {
+            damageAmount *= damageMultiplier; // Increase damage over time
+
+            collision.GetComponent<EnemyHealth>().TakeDamage(damageAmount);
+            yield return new WaitForSeconds(damageInterval); // Adjust the time interval as needed
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -56,6 +65,13 @@ public class EnvHazard : MonoBehaviour
             damageAmount = baseDamage;
             damageOverTimeCoroutine = StartCoroutine(DamageOverTime(collision));
         }
+        if (collision.GetComponent<EnemyHealth>() != null)
+        {
+            affectedEnemies.Add(collision.GetComponent<EnemyHealth>());
+
+            damageAmount = baseDamage;
+            enemyDOTCoroutines.Add(StartCoroutine(DamageOverTime(collision)));
+        }
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
@@ -63,6 +79,18 @@ public class EnvHazard : MonoBehaviour
         {
             StopCoroutine(damageOverTimeCoroutine);
             damageOverTimeCoroutine = null;
+        }
+        if (collision.GetComponent<EnemyHealth>() != null)
+        {
+            if (!affectedEnemies.Contains(collision.GetComponent<EnemyHealth>())) return;
+
+            int index = affectedEnemies.IndexOf(collision.GetComponent<EnemyHealth>());
+            if (index != -1)
+            {
+                StopCoroutine(enemyDOTCoroutines[index]);
+                enemyDOTCoroutines.RemoveAt(index);
+                affectedEnemies.RemoveAt(index);
+            }
         }
     }
 

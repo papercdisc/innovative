@@ -15,6 +15,8 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] float abilityCooldown = 2f;
     [SerializeField] float currentCooldown = 0f;
 
+
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {

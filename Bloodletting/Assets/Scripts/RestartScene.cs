@@ -20,6 +20,7 @@ public class RestartScene : MonoBehaviour
 
     public void RestartCurrentScene()
     {
+        Time.timeScale = 1.0f;
         // Get the current active scene
         var currentScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
         // Reload the current scene

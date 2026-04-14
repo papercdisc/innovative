@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2529062908553552082}
   - component: {fileID: 4507622514393799907}
   - component: {fileID: 3802742077158985343}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -203,7 +203,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1798781747521021679}
   - component: {fileID: 8261661974798077188}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -295,7 +295,7 @@ GameObject:
   - component: {fileID: 2375960597351962247}
   - component: {fileID: 2583709404710448054}
   - component: {fileID: 6798073091958994710}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PlayerAudioManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -577,9 +577,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4172399072368515084, guid: 43baca77553b96e4291b0501f911ac28, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 8049313266502334256, guid: 43baca77553b96e4291b0501f911ac28, type: 3}
       propertyPath: m_Name
       value: HitParticle
+      objectReference: {fileID: 0}
+    - target: {fileID: 8049313266502334256, guid: 43baca77553b96e4291b0501f911ac28, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

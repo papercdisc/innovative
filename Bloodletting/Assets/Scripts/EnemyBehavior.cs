@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyBehavior : MonoBehaviour
@@ -120,7 +121,12 @@ public class EnemyBehavior : MonoBehaviour
             RunFromTarget();
         }
 
-        //AvoidObstacles();
+        if (AvoidObstacles() != rb.linearVelocity.normalized)
+        {
+            rb.linearVelocity = Vector2.Lerp(rb.linearVelocity, AvoidObstacles(), Time.deltaTime * 10);
+
+            Debug.DrawRay(transform.position, AvoidObstacles() * avoidanceDist, Color.red);
+        }
     }
 
     private void RunToTarget()
@@ -136,56 +142,70 @@ public class EnemyBehavior : MonoBehaviour
         rb.linearVelocity = direction * (moveSpeed);
     }
 
-    void AvoidObstacles() // doesnt work :(
+    Vector2 AvoidObstacles() // doesnt work :(
     {
-        Vector2 direction = rb.linearVelocity.normalized;
+        // first, need to consider original pathing target (using weights)
+        // if there is an obstacle in the way, steer away from it
+        // 1) raycast in the direction of movement
+        // 2) if the raycast hits an obstacle, send out two more raycasts at angles to the left and right of the original raycast
+        // 3) steer in the direction of the ray with the highest magnitude (if both are the same, pick one at random)
+        // 3.a) if the chosen raycast hits an obstacle, reverse its direction.
 
-        Ray2D ray = new Ray2D(transform.position, direction);
-        RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, avoidanceDist, mask);
-        if (hit)
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, rb.linearVelocity.normalized, avoidanceDist, mask);
+        if (hit.collider != null)
         {
-            Vector2 perpRDir = Vector2.Perpendicular(direction);
+            //Vector2 fwdLeft = Quaternion.Euler(0, 0, 45) * rb.linearVelocity.normalized;
+            //Vector2 fwdRight = Quaternion.Euler(0, 0, -45) * rb.linearVelocity.normalized;
 
-            Ray2D perpR = new Ray2D(hit.point, perpRDir);
-            Ray2D perpL = new Ray2D(hit.point, -perpRDir);
+            Vector2 trueLeft = Quaternion.Euler(0, 0, 90) * rb.linearVelocity.normalized;
+            Vector2 trueRight = Quaternion.Euler(0, 0, -90) * rb.linearVelocity.normalized;
 
-            Debug.DrawRay(hit.point, perpR.direction, Color.red);
-            Debug.DrawRay(hit.point, perpL.direction, Color.green);
+            Vector2 bckLeft = Quaternion.Euler(0, 0, 135) * rb.linearVelocity.normalized;
+            Vector2 bckRight = Quaternion.Euler(0, 0, -135) * rb.linearVelocity.normalized;
 
-            // if ray hits something:
-            RaycastHit2D hitR = Physics2D.Raycast(perpR.origin, perpR.direction, avoidanceDist);
-            RaycastHit2D hitL = Physics2D.Raycast(perpL.origin, perpL.direction, avoidanceDist);
+            RaycastHit2D leftHit = Physics2D.Raycast(transform.position, trueLeft, avoidanceDist, mask);
+            RaycastHit2D rightHit = Physics2D.Raycast(transform.position, trueRight, avoidanceDist, mask);
 
+            Vector2 newDir = Vector2.zero;
 
-            Vector2 newDirection = direction;
-
-            if (hitR)
+            if (leftHit.collider == null && rightHit.collider == null)
             {
-                if (hitL)
+                // both paths are clear, pick one at random
+                if (Random.value < 0.5f)
                 {
-                    // find which distance is longer
-                    if (hitR.distance > hit.distance) // if right is longer
-                    {
-                        newDirection = perpRDir;
-                    }
-                    else // if left is longer
-                    {
-                        newDirection = -perpRDir;
-                    }
+                    newDir = trueLeft;
                 }
-                else // r is shorter
+                else
                 {
-                    newDirection = -perpRDir;
+                    newDir = trueRight;
                 }
             }
-            else if (hitL)
+            else if (leftHit.collider == null)
             {
-                newDirection = perpRDir;
+                newDir = trueLeft;
             }
+            else if (rightHit.collider == null)
+            {
+                newDir = trueRight;
+            }
+            else
+            {
+                // check which magnitude is higher
+                if (leftHit.distance > rightHit.distance)
+                {
+                    newDir = bckLeft;
+                }
+                else
+                {
+                    newDir = bckRight;
+                }
+            }
+            return newDir.normalized;
         }
-        Debug.DrawRay(ray.origin, ray.direction);
-
-        rb.linearVelocity = direction * (moveSpeed);
+        else
+        {
+            return rb.linearVelocity.normalized;
+        }
     }
 
     IEnumerator DamagePlayerOverTime(Collision2D collision)
@@ -206,7 +226,7 @@ public class EnemyBehavior : MonoBehaviour
         {
             if (timeSinceLastDamage >= damageInterval)
             {
-                collision.gameObject.GetComponent<PlayerHealth>().TakeDamage(damageAmount);
+                damageOverTimeCoroutine = StartCoroutine(DamagePlayerOverTime(collision));
             }
         }
     }

@@ -1,20 +1,24 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class PlayerCombat : MonoBehaviour
 {
     [SerializeField] PlayerInputSubscription getInput;
+    bool basicAttackInput;
     bool abilityInput;
 
     [SerializeField] PlayerAbility equippedAbility;
 
-    bool usedAbility = false;
+    bool usedAbility1 = false;
 
     [SerializeField] GameObject bombPrefab;
 
-    [SerializeField] float abilityCooldown = 2f;
-    [SerializeField] float currentCooldown = 0f;
+    [SerializeField] float ability1Cooldown = 2f;
+    [SerializeField] float currentAbility1Cooldown = 0f;
 
+    [SerializeField] GameObject basicAttackHitbox;
+    Coroutine basicAttackCoroutine = null;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -29,16 +33,27 @@ public class PlayerCombat : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        basicAttackInput = getInput.AttackInput;
         abilityInput = getInput.AltAttackInput;
 
         if (!abilityInput)
         {
-            usedAbility = false;
+            usedAbility1 = false;
         }
 
-        if (abilityInput && !usedAbility)
+        Vector2 lookPosition = getInput.LookInput;
+        Vector2 direction = (lookPosition - (Vector2)transform.position).normalized;
+        basicAttackHitbox.transform.rotation = Quaternion.LookRotation(Vector3.forward, direction);
+
+        if (basicAttackInput)
         {
-            usedAbility = true;
+            Debug.Log("Basic attack input detected!");
+            ExecuteBasicAttack();
+        }
+
+        if (abilityInput && !usedAbility1)
+        {
+            usedAbility1 = true;
 
             switch (equippedAbility)
             {
@@ -50,20 +65,34 @@ public class PlayerCombat : MonoBehaviour
             }
         }
 
-        if (currentCooldown > 0)
+        if (currentAbility1Cooldown > 0)
         {
-            currentCooldown -= Time.deltaTime;
+            currentAbility1Cooldown -= Time.deltaTime;
         }
         else
         {
-            currentCooldown = 0;
+            currentAbility1Cooldown = 0;
         }
+    }
+
+    private void ExecuteBasicAttack()
+    {
+        if (basicAttackCoroutine != null) return;
+        basicAttackCoroutine = StartCoroutine(BasicAttackCoroutine());
+    }
+
+    IEnumerator BasicAttackCoroutine()
+    {
+        basicAttackHitbox.SetActive(true);
+        yield return new WaitForSeconds(0.5f); // Duration of the hitbox being active
+        basicAttackHitbox.SetActive(false);
+        basicAttackCoroutine = null;
     }
 
     private void ExecuteBombAbility()
     {
         //Debug.Log("Bomb ability executed!");
-        if (currentCooldown > 0)
+        if (currentAbility1Cooldown > 0)
         {
             //Debug.Log("Ability is on cooldown!");
             return;
@@ -76,6 +105,6 @@ public class PlayerCombat : MonoBehaviour
         GameObject bomb = Instantiate(bombPrefab, transform.position, Quaternion.identity);
         bomb.GetComponent<BombBehavior>().velocity = direction; // Example velocity, you can set this based on player direction or input
 
-        currentCooldown = abilityCooldown;
+        currentAbility1Cooldown = ability1Cooldown;
     }
 }

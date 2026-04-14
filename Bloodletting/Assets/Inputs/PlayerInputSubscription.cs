@@ -17,6 +17,8 @@ public class PlayerInputSubscription : MonoBehaviour
     }
     public Vector2 MoveInput { get; private set; } = Vector2.zero;
     public Vector2 LookInput { get; private set; } = Vector2.zero;
+
+    public bool AttackInput { get; private set; } = false;
     public bool AltAttackInput { get; private set; } = false;
 
     Player_TopDown _Input = null;
@@ -29,6 +31,9 @@ public class PlayerInputSubscription : MonoBehaviour
         _Input.Player.Move.performed += SetMovement;
         _Input.Player.Move.canceled += SetMovement;
 
+        _Input.Player.Attack.performed += SetAttack;
+        _Input.Player.Attack.canceled += SetAttack;
+
         _Input.Player.AltAttack.performed += SetAltAttack;
         _Input.Player.AltAttack.canceled += SetAltAttack;
 
@@ -39,6 +44,9 @@ public class PlayerInputSubscription : MonoBehaviour
     {
         _Input.Player.Move.performed -= SetMovement;
         _Input.Player.Move.canceled -= SetMovement;
+
+        _Input.Player.Attack.performed -= SetAttack;
+        _Input.Player.AltAttack.canceled -= SetAltAttack;
 
         _Input.Player.AltAttack.performed -= SetAltAttack;
         _Input.Player.AltAttack.canceled -= SetAltAttack;
@@ -65,5 +73,9 @@ public class PlayerInputSubscription : MonoBehaviour
     void SetAltAttack(InputAction.CallbackContext ctx)
     {
         AltAttackInput = ctx.ReadValueAsButton();
+    }
+    void SetAttack(InputAction.CallbackContext ctx)
+    {
+        AttackInput = ctx.ReadValueAsButton();
     }
 }

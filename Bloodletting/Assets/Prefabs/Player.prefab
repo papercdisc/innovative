@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5664117478763752772}
   - component: {fileID: 634359667162551202}
+  - component: {fileID: 3139181939776076514}
   m_Layer: 6
   m_Name: BasicAttack
   m_TagString: Untagged
@@ -84,6 +85,20 @@ PolygonCollider2D:
       - {x: 0, y: 0}
       - {x: -0.75, y: 1.5}
   m_UseDelaunayMesh: 0
+--- !u!114 &3139181939776076514
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1960362852685196770}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4590961c3267bd34da08c2a96b7f5b72, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerAttackHitbox
+  damage: 10
+  hb: {fileID: 634359667162551202}
 --- !u!1 &2458007359434484441
 GameObject:
   m_ObjectHideFlags: 0

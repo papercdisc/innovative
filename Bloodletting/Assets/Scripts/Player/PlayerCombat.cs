@@ -8,6 +8,8 @@ public class PlayerCombat : MonoBehaviour
     bool basicAttackInput;
     bool abilityInput;
 
+    bool BAIsPressed = false;
+
     [SerializeField] PlayerAbility equippedAbility;
 
     bool usedAbility1 = false;
@@ -18,6 +20,7 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] float currentAbility1Cooldown = 0f;
 
     [SerializeField] GameObject basicAttackHitbox;
+    [SerializeField] float hbActiveDuration = 0.25f;
     Coroutine basicAttackCoroutine = null;
 
 
@@ -40,13 +43,18 @@ public class PlayerCombat : MonoBehaviour
         {
             usedAbility1 = false;
         }
+        if (!basicAttackInput) { // quick fix for now, but will want to implement a hold down feature (probably with a coroutine that restarts if the key is still held down)
+            BAIsPressed = false;
+        }
 
         Vector2 lookPosition = getInput.LookInput;
         Vector2 direction = (lookPosition - (Vector2)transform.position).normalized;
         basicAttackHitbox.transform.rotation = Quaternion.LookRotation(Vector3.forward, direction);
 
-        if (basicAttackInput)
+        if (basicAttackInput && !BAIsPressed)
         {
+            BAIsPressed = true;
+
             Debug.Log("Basic attack input detected!");
             ExecuteBasicAttack();
         }
@@ -84,7 +92,7 @@ public class PlayerCombat : MonoBehaviour
     IEnumerator BasicAttackCoroutine()
     {
         basicAttackHitbox.SetActive(true);
-        yield return new WaitForSeconds(0.5f); // Duration of the hitbox being active
+        yield return new WaitForSeconds(hbActiveDuration); // Duration of the hitbox being active
         basicAttackHitbox.SetActive(false);
         basicAttackCoroutine = null;
     }

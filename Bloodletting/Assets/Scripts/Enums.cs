@@ -13,7 +13,8 @@ public enum EnemyType
 {
     Chaser,
     Coward,
-    Saboteur
+    Saboteur,
+    Healer
 }
 public enum EnemyState
 {

@@ -26,7 +26,7 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    public void PlayPlayerHitAudio()
+    public void PlayPlayerHitAudio(bool isHealAttack)
     {
         if (playerHitAudio != null)
         {

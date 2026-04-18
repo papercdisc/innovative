@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3877203430153638066}
   - component: {fileID: 4317009148367586875}
   - component: {fileID: 7908291357832578642}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Particle System
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4907,7 +4907,7 @@ GameObject:
   - component: {fileID: 2045952770185739739}
   - component: {fileID: 3954902219430485766}
   - component: {fileID: 7163528603570993480}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: HitParticle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4943,6 +4943,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayParticle
   particleSystemToPlay: {fileID: 3954902219430485766}
+  isHealParticle: 0
 --- !u!198 &3954902219430485766
 ParticleSystem:
   m_ObjectHideFlags: 0

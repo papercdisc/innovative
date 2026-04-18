@@ -55,7 +55,6 @@ public class PlayerCombat : MonoBehaviour
         {
             BAIsPressed = true;
 
-            Debug.Log("Basic attack input detected!");
             ExecuteBasicAttack();
         }
 

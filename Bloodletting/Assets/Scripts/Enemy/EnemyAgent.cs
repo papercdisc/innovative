@@ -32,7 +32,7 @@ public class EnemyAgent : MonoBehaviour
         moveDir.Normalize();
     }
 
-    public void AttackTarget(Transform target)
+    public void AttackTarget(Transform target, bool isHealAttack)
     {
         //Debug.Log("I AM ACCESSINGG THIS ATTACK FUNCTION!");
 
@@ -40,8 +40,10 @@ public class EnemyAgent : MonoBehaviour
 
         if (target.gameObject.GetComponent<PlayerHealth>() != null)
         {
+            float damageToDeal = isHealAttack ? -damageAmount : damageAmount; // deal negative damage if it's a heal attack
+
             //Debug.Log("I should be doing damage but im not cause im a fucking idiot");
-            target.gameObject.GetComponent<PlayerHealth>().TakeDamage(damageAmount);
+            target.gameObject.GetComponent<PlayerHealth>().TakeDamage(damageToDeal);
         }
     }
 }

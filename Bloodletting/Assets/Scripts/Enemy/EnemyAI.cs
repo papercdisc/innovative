@@ -10,34 +10,31 @@ public class EnemyAI : MonoBehaviour
 
     #region Steering Parameters
     [Header("Steering")]
-    [SerializeField]
-    private List<Detector> detectors;
-
-    [SerializeField]
-    private List<SteeringBehavior> steeringBehaviors;
-
-    [SerializeField]
-    private AIData aiData;
-
-    [SerializeField]
-    private ContextSolver moveDirSolver;
+    [SerializeField] private List<Detector> detectors;
+    [SerializeField] private List<SteeringBehavior> steeringBehaviors;
+    [SerializeField] private AIData aiData;
+    [SerializeField] private ContextSolver moveDirSolver;
     #endregion
 
     [Header("Behavior Settings")]
     [SerializeField]
     private float detectionDelay = 0.05f, aiUpdateDelay = 0.06f, attackDelay = 1f;
 
-    [SerializeField]
-    private float attackDist = 0.5f;
+    [SerializeField] private float attackDist = 0.5f;
 
-    [SerializeField]
-    EnemyState currentEnemyState;
+    // health thresholds
+    [SerializeField] private float playerHealthThreshold = 0.7f; // for saboteur behavior, runs away if player health is above this percentage
+    [SerializeField] private float healthThreshold = 0.3f; // for coward behavior, runs away if enemy health is below this percentage
 
-    [SerializeField]
-    private Vector2 movementInput;
+    // state variables
+    [SerializeField] EnemyState currentEnemyState;
+    [SerializeField] bool shouldAvoidPlayer = false;
+
+    // movement vector
+    [SerializeField] private Vector2 movementInput;
 
     [Header("Events")]
-    public UnityEvent<Transform> onAttack;
+    public UnityEvent<Transform, bool> onAttack;
     public UnityEvent<Vector2> onMove;
 
     void Start()
@@ -47,10 +44,10 @@ public class EnemyAI : MonoBehaviour
 
     private void PerformDetection()
     {
-        bool playerIsDanger = false; // just keeping it false for now. this will change with the implementation of more specific behaviors.
+        //bool playerIsDanger = false; // just keeping it false for now. this will change with the implementation of more specific behaviors.
         foreach (Detector detector in detectors)
         {
-            detector.Detect(aiData, playerIsDanger);
+            detector.Detect(aiData, shouldAvoidPlayer);
         }
 
         float[] danger = new float[8];
@@ -75,6 +72,9 @@ public class EnemyAI : MonoBehaviour
             case EnemyType.Saboteur:
                 UpdateSaboteur();
                 break;
+            case EnemyType.Healer:
+                UpdateHealer();
+                break;
         }
     }
 
@@ -86,7 +86,7 @@ public class EnemyAI : MonoBehaviour
             if (currentEnemyState == EnemyState.Idle)
             {
                 currentEnemyState = EnemyState.Aggro;
-                StartCoroutine(ChaseAndAttack());
+                StartCoroutine(ChaseAndAttack(false));
             }
         }
         else if(aiData.GetTargetsCount() > 0) // if there are valid targets in the list, find another
@@ -102,10 +102,58 @@ public class EnemyAI : MonoBehaviour
     }
     private void UpdateSaboteur() // chases player, but runs away if player has high health/overhealth
     {
+        if (PlayerHealth.Instance == null) return;
 
+        if (PlayerHealth.Instance.currentHealth / PlayerHealth.Instance.maxHealth > playerHealthThreshold)
+        {
+            shouldAvoidPlayer = true;
+            if (currentEnemyState != EnemyState.Flee)
+            {
+                currentEnemyState = EnemyState.Flee;
+                StartCoroutine(Flee());
+            }
+        }
+        else
+        {
+            shouldAvoidPlayer = false;
+
+            if (aiData.currentTarget != null) // if current target is in range, chase
+            {
+                if (currentEnemyState == EnemyState.Idle)
+                {
+                    currentEnemyState = EnemyState.Aggro;
+                    StartCoroutine(ChaseAndAttack(false));
+                }
+            }
+            else if (aiData.GetTargetsCount() > 0) // if there are valid targets in the list, find another
+            {
+                // choose closest target in list as current target
+                aiData.currentTarget = aiData.targets[0];
+            }
+        }
+
+        onMove?.Invoke(movementInput);
+    }
+    private void UpdateHealer() // same behavior as chaser, but heals player instead
+    {
+        if (aiData.currentTarget != null) // if current target is in range, chase
+        {
+            if (currentEnemyState == EnemyState.Idle)
+            {
+                currentEnemyState = EnemyState.Aggro;
+                StartCoroutine(ChaseAndAttack(true));
+            }
+        }
+        else if (aiData.GetTargetsCount() > 0) // if there are valid targets in the list, find another
+        {
+            // choose closest target in list as current target
+            aiData.currentTarget = aiData.targets[0];
+        }
+
+        onMove?.Invoke(movementInput);
     }
 
-    private IEnumerator ChaseAndAttack()
+    private IEnumerator ChaseAndAttack(bool isHealAttack)
     {
         if(aiData.currentTarget == null)
         {
@@ -122,18 +170,46 @@ public class EnemyAI : MonoBehaviour
             {
                 // attack logic
                 movementInput = Vector2.zero;
-                onAttack?.Invoke(aiData.currentTarget);
+                onAttack?.Invoke(aiData.currentTarget, isHealAttack);
                 yield return new WaitForSeconds(attackDelay); // wait to attack again
-                StartCoroutine(ChaseAndAttack());
+                StartCoroutine(ChaseAndAttack(isHealAttack));
             }
             else
             {
                 // chase logic
                 movementInput = moveDirSolver.GetDirectionToMove(steeringBehaviors, aiData);
                 yield return new WaitForSeconds(aiUpdateDelay);
-                StartCoroutine(ChaseAndAttack());
+                StartCoroutine(ChaseAndAttack(isHealAttack));
             }
         }
+    }
+
+    private IEnumerator Flee()
+    {
+        if (!shouldAvoidPlayer)
+        {
+            if (aiData.currentTarget == null)
+            {
+                 // stopping logic, return to idle
+                movementInput = Vector2.zero;
+                currentEnemyState = EnemyState.Idle;
+            }
+            else
+            {
+                // if a target is still in range, start chasing again
+                movementInput = moveDirSolver.GetDirectionToMove(steeringBehaviors, aiData);
+                yield return new WaitForSeconds(aiUpdateDelay);
+                StartCoroutine(ChaseAndAttack(false));
+            }
+
+            yield break;
+        }
+
+        // flee logic
+        movementInput = moveDirSolver.GetDirectionToMove(steeringBehaviors, aiData);
+        onMove?.Invoke(movementInput);
+        yield return new WaitForSeconds(aiUpdateDelay);
+        StartCoroutine(Flee());
     }
 
     public void OnDeath()

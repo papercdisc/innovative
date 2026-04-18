@@ -23,7 +23,7 @@ public class PlayerHealth : Health
     [HideInInspector] public UnityEvent<float> OnHealthChanged;
     [HideInInspector] public UnityEvent<float> OnOverhealthChanged;
     
-    public UnityEvent OnDamageTaken;
+    public UnityEvent<bool> OnDamageTaken;
     public UnityEvent OnDeath;
 
     [Header("Health Stats")]
@@ -118,7 +118,7 @@ public class PlayerHealth : Health
 
     public override void TakeDamage(float dmg)
     {
-        if (currentOverhealth > 0)
+        if (currentOverhealth > 0) 
         {
             currentOverhealth -= dmg;
             OnOverhealthChanged.Invoke(currentOverhealth);
@@ -132,17 +132,37 @@ public class PlayerHealth : Health
         }
         else
         {
-            currentHealth -= dmg;
-            OnHealthChanged?.Invoke(currentHealth);
-
-            if (currentHealth <= 0)
+            if((currentHealth - dmg) > maxHealth) // If the damage would put us above max health, add to overhealth instead
             {
-                currentHealth = 0; // Ensure health does not go below 0
-                Die();
+                float excessHealth = (currentHealth - dmg) - maxHealth;
+                if (excessHealth > 0) { 
+                    currentHealth = maxHealth; 
+                    currentOverhealth += excessHealth;
+                }
+                else
+                {
+                    currentHealth -= dmg;
+                }
+
+                OnHealthChanged?.Invoke(currentHealth);
+                OnOverhealthChanged?.Invoke(currentOverhealth);
+            }
+            else 
+            { 
+                currentHealth -= dmg;
+                OnHealthChanged?.Invoke(currentHealth);
+
+                if (currentHealth <= 0)
+                {
+                    currentHealth = 0; // Ensure health does not go below 0
+                    Die();
+                }
             }
         }
 
-        OnDamageTaken?.Invoke();
+        bool isHealAttack = dmg < 0;
+
+        OnDamageTaken?.Invoke(isHealAttack);
         activeRegenBuffer = regenBufferTime; // Reset the regeneration buffer time after taking damage
     }
     public override void Die()

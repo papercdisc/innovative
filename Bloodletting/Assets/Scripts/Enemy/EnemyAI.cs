@@ -35,7 +35,7 @@ public class EnemyAI : MonoBehaviour
 
     [Header("Events")]
     public UnityEvent<Transform, bool> onAttack;
-    public UnityEvent<Vector2> onMove;
+    public UnityEvent<Vector2, bool> onMove;
 
     void Start()
     {
@@ -81,6 +81,7 @@ public class EnemyAI : MonoBehaviour
     // Enemy type-specific update functions
     private void UpdateChaser() // most basic enemy. just chases player in range.
     {
+        bool shouldStop = false;
         if (aiData.currentTarget != null) // if current target is in range, chase
         {
             if (currentEnemyState == EnemyState.Idle)
@@ -94,14 +95,19 @@ public class EnemyAI : MonoBehaviour
             // choose closest target in list as current target
             aiData.currentTarget = aiData.targets[0];
         }
+        else
+        {
+            shouldStop = true;
+        }
 
-        onMove?.Invoke(movementInput);
+        onMove?.Invoke(movementInput, shouldStop);
     }
     private void UpdateCoward() // runs away from player if low health, otherwise chases player in range
     {
     }
     private void UpdateSaboteur() // chases player, but runs away if player has high health/overhealth
     {
+        bool shouldStop = false;
         if (PlayerHealth.Instance == null) return;
 
         if (PlayerHealth.Instance.currentHealth / PlayerHealth.Instance.maxHealth > playerHealthThreshold)
@@ -130,12 +136,17 @@ public class EnemyAI : MonoBehaviour
                 // choose closest target in list as current target
                 aiData.currentTarget = aiData.targets[0];
             }
+            else
+            {
+                shouldStop = true;
+            }
         }
 
-        onMove?.Invoke(movementInput);
+        onMove?.Invoke(movementInput, shouldStop);
     }
     private void UpdateHealer() // same behavior as chaser, but heals player instead
     {
+        bool shouldStop = false;
         if (aiData.currentTarget != null) // if current target is in range, chase
         {
             if (currentEnemyState == EnemyState.Idle)
@@ -149,8 +160,12 @@ public class EnemyAI : MonoBehaviour
             // choose closest target in list as current target
             aiData.currentTarget = aiData.targets[0];
         }
+        else
+        {
+            shouldStop = true;
+        }
 
-        onMove?.Invoke(movementInput);
+        onMove?.Invoke(movementInput, shouldStop);
     }
 
     private IEnumerator ChaseAndAttack(bool isHealAttack)
@@ -207,7 +222,7 @@ public class EnemyAI : MonoBehaviour
 
         // flee logic
         movementInput = moveDirSolver.GetDirectionToMove(steeringBehaviors, aiData);
-        onMove?.Invoke(movementInput);
+        onMove?.Invoke(movementInput, false);
         yield return new WaitForSeconds(aiUpdateDelay);
         StartCoroutine(Flee());
     }

@@ -28,6 +28,11 @@ public class ObstacleAvoidanceBehavior : SteeringBehavior
                 = distToObs <= agentColliderRadius ? 1f // if we're colliding, max weight
                 : (radius - distToObs) / radius; // otherwise, weight decreases linearly with distance
 
+            if (obsstacleCollider.gameObject.layer == LayerMask.NameToLayer("Bomb"))
+            {
+                weight *= 0.5f;
+            }
+
             Vector2 dirToObsNormalized = dirToObs.normalized;
 
             // add obstacle parameters to danger array

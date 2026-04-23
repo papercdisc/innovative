@@ -35,6 +35,9 @@ public class PlayerHealth : Health
     [field: SerializeField] public float overhealthSafeTime { get; private set; } = 15; // amount of time it is safe to have overhealth before exploding (DO NOT CHANGE DURING RUNTIME)
     [field: SerializeField] public float activeOverhealthSafeTime { get; private set; }
 
+    [SerializeField] private float overhealthTimerBuffer = 0.5f;
+    [SerializeField] private float activeOverhealthTimerBuffer;
+
     [Header("Health Regeneration")]
     [SerializeField] private float regenRate = 5f; // Health points regenerated per second (DO NOT CHANGE DURING RUNTIME)
     [SerializeField] private float regenBufferTime = 3f;
@@ -107,7 +110,14 @@ public class PlayerHealth : Health
     {
         if (currentOverhealth > 0)
         {
+            if (activeOverhealthTimerBuffer > 0) // buffer time (set on hit)
+            {
+                activeOverhealthTimerBuffer -= Time.deltaTime;
+                return;
+            }
+
             activeOverhealthSafeTime -= Time.deltaTime;
+            
             if (activeOverhealthSafeTime <= 0)
             {
                 Die(); // Player dies if overhealth is not reduced in time
@@ -122,6 +132,8 @@ public class PlayerHealth : Health
         {
             currentOverhealth -= dmg;
             OnOverhealthChanged.Invoke(currentOverhealth);
+
+            activeOverhealthTimerBuffer = overhealthTimerBuffer; // Reset the overhealth timer buffer after taking damage to overhealth
 
             if (currentOverhealth < 0)
             {

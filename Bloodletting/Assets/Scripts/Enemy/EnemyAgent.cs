@@ -7,7 +7,9 @@ public class EnemyAgent : MonoBehaviour
     Rigidbody2D rb;
 
     [SerializeField] float moveSpeed;
+    [SerializeField] float stopSpeed = 1.2f;
     Vector2 moveDir;
+    bool stopped = false;
 
     [SerializeField] float damageAmount = 10f;
 
@@ -24,12 +26,18 @@ public class EnemyAgent : MonoBehaviour
         {
             rb.linearVelocity = moveDir * moveSpeed;
         }
+        else if( moveDir == Vector2.zero && stopped) 
+        {
+            // lerp to stop
+            rb.linearVelocity = Vector2.Lerp(rb.linearVelocity, Vector2.zero, stopSpeed * Time.fixedDeltaTime);
+        }
     }
 
-    public void SetMoveDir(Vector2 dir)
+    public void SetMoveDir(Vector2 dir, bool isStopped)
     {
         moveDir = dir;
         moveDir.Normalize();
+        stopped = isStopped;
     }
 
     public void AttackTarget(Transform target, bool isHealAttack)

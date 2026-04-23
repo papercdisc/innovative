@@ -19,8 +19,12 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] float ability1Cooldown = 2f;
     [SerializeField] float currentAbility1Cooldown = 0f;
 
-    [SerializeField] GameObject basicAttackHitbox;
+    [SerializeField] Collider2D basicAttackHitbox;
     [SerializeField] float hbActiveDuration = 0.25f;
+
+    [SerializeField] SpriteRenderer basicAttackSprite;
+    [SerializeField] Color activeBAColor, inactiveBAColor;
+
     Coroutine basicAttackCoroutine = null;
 
 
@@ -31,6 +35,9 @@ public class PlayerCombat : MonoBehaviour
         {
             getInput = PlayerInputSubscription.Instance;
         }
+
+        basicAttackHitbox.enabled = false;
+        basicAttackSprite.color = inactiveBAColor;
     }
 
     // Update is called once per frame
@@ -90,9 +97,14 @@ public class PlayerCombat : MonoBehaviour
 
     IEnumerator BasicAttackCoroutine()
     {
-        basicAttackHitbox.SetActive(true);
+        basicAttackHitbox.enabled = true;
+        basicAttackSprite.color = activeBAColor;
+
         yield return new WaitForSeconds(hbActiveDuration); // Duration of the hitbox being active
-        basicAttackHitbox.SetActive(false);
+        
+        basicAttackHitbox.enabled = false;
+        basicAttackSprite.color = inactiveBAColor;
+        
         basicAttackCoroutine = null;
     }
 

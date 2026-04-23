@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3728372168362932277}
   - component: {fileID: 7089901990253633136}
   - component: {fileID: 590537155298360138}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Bomb
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -59,7 +59,7 @@ CircleCollider2D:
     m_Bits: 119
   m_ForceReceiveLayers:
     serializedVersion: 2
-    m_Bits: 119
+    m_Bits: 4294967295
   m_ContactCaptureLayers:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -116,6 +116,7 @@ MonoBehaviour:
   velocity: {x: 0, y: 0}
   initialSpeed: 16
   decayRate: 14
+  stickTarget: {fileID: 0}
   explodeThreshold: 2
   explodeDelay: 2
   explosionChild: {fileID: 7335287593219457708}
@@ -129,7 +130,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2434443104572276541}
   - component: {fileID: 5957193387499959156}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Indicator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -219,7 +220,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5547698449966084262}
   - component: {fileID: 3939293652949694601}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BombSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -309,7 +310,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4973382991301824282}
   - component: {fileID: 2366483380968763385}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Radius
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -401,7 +402,7 @@ GameObject:
   - component: {fileID: 4439626091148866837}
   - component: {fileID: 6412733298843923796}
   - component: {fileID: 5704619098087867933}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Explosion
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -500,7 +501,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 985a7ca027d257b44992a94101fa18c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Explosion
-  bombBehavior: {fileID: 0}
-  explosionDamage: 20
+  bombBehavior: {fileID: 590537155298360138}
+  explosionDamage: 25
   explosionRadius: 3.77
   indicator: {fileID: 2621624308765819362}

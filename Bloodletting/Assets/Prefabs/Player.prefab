@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &5664117478763752772
 Transform:
   m_ObjectHideFlags: 0
@@ -99,6 +99,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAttackHitbox
   damage: 10
   hb: {fileID: 634359667162551202}
+  playerTransform: {fileID: 2748928606467292352}
 --- !u!1 &2458007359434484441
 GameObject:
   m_ObjectHideFlags: 0
@@ -204,8 +205,10 @@ MonoBehaviour:
   <maxHealth>k__BackingField: 100
   <currentHealth>k__BackingField: 0
   <currentOverhealth>k__BackingField: 0
-  <overhealthSafeTime>k__BackingField: 10
+  <overhealthSafeTime>k__BackingField: 6
   <activeOverhealthSafeTime>k__BackingField: 0
+  overhealthTimerBuffer: 0.1
+  activeOverhealthTimerBuffer: 0
   regenRate: 5
   regenBufferTime: 2
   activeRegenBuffer: 0
@@ -223,7 +226,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   getInput: {fileID: 0}
-  maxSpeed: 8
+  maxSpeed: 7.83
   currentSpeed: 0
   acceleration: 10
   deceleration: 3
@@ -244,8 +247,11 @@ MonoBehaviour:
   bombPrefab: {fileID: 267269677311208075, guid: 782c3ad8c96e5eb488954c00e26f53d6, type: 3}
   ability1Cooldown: 2
   currentAbility1Cooldown: 0
-  basicAttackHitbox: {fileID: 1960362852685196770}
+  basicAttackHitbox: {fileID: 634359667162551202}
   hbActiveDuration: 0.25
+  basicAttackSprite: {fileID: 8826464333815600241}
+  activeBAColor: {r: 1, g: 1, b: 1, a: 0.16862746}
+  inactiveBAColor: {r: 0.654088, g: 0.654088, b: 0.654088, a: 0.039215688}
 --- !u!50 &4507622514393799907
 Rigidbody2D:
   serializedVersion: 5
@@ -308,7 +314,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 0.5
+  m_Radius: 0.32
 --- !u!1 &3885141420454580243
 GameObject:
   m_ObjectHideFlags: 0
@@ -410,7 +416,7 @@ GameObject:
   - component: {fileID: 4555110386951151292}
   - component: {fileID: 1976176648352958136}
   m_Layer: 6
-  m_Name: Sprite (1)
+  m_Name: Shadow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -517,7 +523,7 @@ Transform:
   m_GameObject: {fileID: 6382075898896439435}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 232.8899, y: -30.049862, z: 85.27161}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -815,7 +821,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.21176471}
+  m_Color: {r: 0.654902, g: 0.654902, b: 0.654902, a: 0.039215688}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

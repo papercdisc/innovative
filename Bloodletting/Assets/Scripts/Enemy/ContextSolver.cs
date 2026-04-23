@@ -31,11 +31,30 @@ public class ContextSolver : MonoBehaviour
             (danger, interest) = behavior.GetSteering(danger, interest, data);
         }
 
-        // subtract danger values from interest array
-        // (this is so that, if there is an obstacle in the same direction as the interest, the avoidance behavior wins out)
-        for (int i = 0; i < 8; i++)
+        bool hasTarget = data.GetTargetsCount() > 0;
+        float highestDanger = 0;
+
+        if (hasTarget)
         {
-            interest[i] = Mathf.Clamp01(interest[i] - danger[i]);
+            // subtract danger values from interest array
+            // (this is so that, if there is an obstacle in the same direction as the interest, the avoidance behavior wins out)
+            for (int i = 0; i < 8; i++)
+            {
+                interest[i] = Mathf.Clamp01(interest[i] - danger[i]);
+            }
+        }
+        else
+        {
+            // if we're close to an obstacle, avoid it, otherwise, stop
+            for (int i = 0; i < 8; i++)
+            {
+                interest[i] = Mathf.Clamp01(1 - danger[i]);
+
+                if (danger[i] > highestDanger)
+                {
+                    highestDanger = danger[i];
+                }
+            }
         }
         interestGizmo = interest;
 
@@ -46,6 +65,13 @@ public class ContextSolver : MonoBehaviour
             outputDir += Directions.eightDirections[i] * interest[i]; // multiply each direction by interest, and add said direction to output
         }
         outputDir.Normalize(); // normalize to isolate direction
+
+        //Debug.Log("has target?: " + hasTarget);
+        //Debug.Log("highest danger: " + highestDanger);
+        if (highestDanger < 0.3f && !hasTarget) // if we're not close to an obstacle and we don't have a target, stop
+        {
+            outputDir = Vector2.zero;
+        }
 
         resultDir = outputDir;
 
